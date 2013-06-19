@@ -3,6 +3,7 @@
     "description": "Easy translation manipulation of your Eloquent models in Laravel 4.",
     "keywords": ["laravel","eloquent","translatable"],
     "homepage": "https://github.com/orkhan/InkTranslatable",
+    "license": "MIT",
     "authors": [
         {
             "name": "Orkhan",
