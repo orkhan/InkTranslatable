@@ -19,7 +19,7 @@ Afterwards, run `composer update` from your command line.
 Then, add `'Ink\InkTranslatable\InkTranslatableServiceProvider',` to the list of service providers in `app/config/app.php`
 and add `'Translatable' => 'Ink\InkTranslatable\Facades\Translatable'` to the list of class aliases in `app/config/app.php`.
 
-From the command line again, run `php artisan config:publish orkhan/InkTranslation`.
+From the command line again, run `php artisan config:publish ink/ink-translatable`.
 
 
 ## Adding locales config
