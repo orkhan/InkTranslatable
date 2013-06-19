@@ -1,0 +1,2 @@
+InkTranslatable
+===============
