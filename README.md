@@ -9,7 +9,7 @@ First, you'll need to add the package to the `require` attribute of your `compos
 ```json
 {
     "require": {
-        "ink/ink-translatable": "dev-master"
+        "ink/ink-translatable": "1.0.0-beta"
     },
 }
 ```
