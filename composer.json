@@ -1,6 +1,8 @@
 {
     "name": "ink/ink-translatable",
-    "description": "",
+    "description": "Easy translation manipulation of your Eloquent models in Laravel 4.",
+    "keywords": ["laravel","eloquent","translatable"],
+    "homepage": "https://github.com/orkhan/InkTranslatable",
     "authors": [
         {
             "name": "Orkhan",
@@ -8,13 +10,11 @@
         }
     ],
     "require": {
-        "php": ">=5.3.0",
-        "illuminate/support": "4.0.x"
+    	"php": ">=5.3.0",
+		"illuminate/support": "4.0.x",
+		"illuminate/config": "4.0.x"
     },
     "autoload": {
-        "classmap": [
-            "src/migrations"
-        ],
         "psr-0": {
             "Ink\\InkTranslatable": "src/"
         }
