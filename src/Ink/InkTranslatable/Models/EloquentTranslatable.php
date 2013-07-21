@@ -8,6 +8,8 @@ abstract class EloquentTranslatable extends \Eloquent {
     public static function find($id, $columns = array('*'))
     {
         $record = parent::find($id);
+        if ( $record === NULL )
+        	return NULL;
         return $record->join(
             static::$translatable['table'],
             $record->getTable().'.id', '=', static::$translatable['table'].'.'.static::$translatable['relationship_field']
