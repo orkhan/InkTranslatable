@@ -45,9 +45,7 @@ class Translatable {
         // if the model isn't translatable, then do nothing
 
         if ( !isset( $model::$translatable ) )
-        {
             return true;
-        }
 
 
         // load the configuration
@@ -57,7 +55,7 @@ class Translatable {
 
         // nicer variables for readability
 
-        $table = $relationship_field = $locale_field = $translatables = null;
+        $model_name = $table_name = $relationship_field = $locale_field = $translatables = null;
         extract( $config, EXTR_IF_EXISTS );
 
         // POST parameters
@@ -79,7 +77,7 @@ class Translatable {
 
                 // finding translation
 
-                $translation = DB::table($table)->where( $relationship_field, '=', $model->id )
+                $translation = DB::table($table_name)->where( $relationship_field, '=', $model->id )
                     ->where( $locale_field, '=', $locale )
                     ->first();
 
@@ -87,7 +85,7 @@ class Translatable {
 
                 if ($translation)
                 {
-                    DB::table($table)
+                    DB::table($table_name)
                         ->where( $relationship_field, '=', $translation->{$relationship_field} )
                         ->where( $locale_field, '=', $translation->{$locale_field} )
                         ->update($translatables);
@@ -100,7 +98,7 @@ class Translatable {
                     $translatables[$locale_field] = $locale;
                     $translatables[$relationship_field] = $model->id;
 
-                    DB::table($table)->insert(
+                    DB::table($table_name)->insert(
                         $translatables
                     );
                 }

@@ -1,56 +1,42 @@
 <?php namespace Ink\InkTranslatable\Models;
 
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 
 abstract class EloquentTranslatable extends \Eloquent {
-
-    public static function find($id, $columns = array('*'))
+	
+    public function translations($locale = '')
     {
-        $record = parent::find($id);
-        if ( $record === NULL )
-            return NULL;
-        $translatable_record = $record->join(
-            static::$translatable['table'],
-            $record->getTable().'.id', '=', static::$translatable['table'].'.'.static::$translatable['relationship_field']
-        )
-            ->where(static::$translatable['table'].'.'.static::$translatable['locale_field'], '=', Config::get('locales.default'))
-            ->where(static::$translatable['table'].'.'.static::$translatable['relationship_field'], '=', $id)
-            ->first();
-            
-        if ($translatable_record)
-        	return $translatable_record;
-        else
-        	return $record;
+		if ( !$locale ) $locale = Config::get('app.locale');
+		
+        return $this->_translations()->where(static::$translatable['locale_field'], '=', $locale);
     }
-
-    public function delete()
-    {
-        $translations = DB::table(static::$translatable['table'])->where(static::$translatable['relationship_field'], '=', $this->id)->delete();
-
-        if( $translations )
-            parent::delete();
-        return true;
-    }
-
-    public function scopeTranslations($query)
-    {
-        return $query->join(
-            static::$translatable['table'],
-            $this->table.'.id', '=', static::$translatable['table'].'.'.static::$translatable['relationship_field']
-        )->where(static::$translatable['table'].'.'.static::$translatable['locale_field'], '=', Config::get('locales.default'));
-    }
-
-    public function getTranslation($locale = '')
-    {
-    	if (!$locale) $locale = Config::get('locales.default');
-        return $this->join(
-            static::$translatable['table'],
-            $this->table.'.id', '=', static::$translatable['table'].'.'.static::$translatable['relationship_field']
-        )
-            ->where(static::$translatable['table'].'.'.static::$translatable['locale_field'], '=', $locale)
-            ->where(static::$translatable['table'].'.'.static::$translatable['relationship_field'], '=', $this->id)
-            ->first();
-    }
+	
+	public function _translations()
+	{
+		return $this->hasMany(static::$translatable['model_name'], static::$translatable['relationship_field']);
+	}
+	
+	public function __get($key)
+	{
+		$locales = Config::get('app.locales');
+		
+		if ( in_array($key, $locales) ) 
+		{
+			return $this->translations($key)->first();
+		}
+		
+		if ( array_key_exists($key, static::$translatable['translatables']) )
+		{
+			return $this->translations->first()->{$key};
+		}
+		
+		return parent::__get($key);
+	}
+	
+	public function delete()
+	{
+		$this->_translations()->delete();
+		return parent::delete();
+	}
 
 }

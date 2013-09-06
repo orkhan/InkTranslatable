@@ -4,7 +4,7 @@ class PostController extends BaseController {
 
     public function index()
     {
-        $records = Post::translations()->orderBy('created_at')->get();
+        $records = Post::with('translations')->get();
         return View::make('post.index')
             ->with('records', $records);
     }
@@ -18,11 +18,7 @@ class PostController extends BaseController {
     {
         $record = new Post;
         if( $record->save() )
-        {
-            $records = Post::translations()->orderBy('created_at')->get();
-            return View::make('post.index')
-                ->with('records', $records);
-        }
+            return Redirect::to('posts');
     }
 
     public function show($id)
@@ -43,20 +39,14 @@ class PostController extends BaseController {
     {
         $record = Post::find($id);
         if( $record->save() )
-        {
-            $records = Post::translations()->orderBy('created_at')->get();
-            return View::make('post.index')
-                ->with('records', $records);
-        }
+            return Redirect::to('posts');
     }
 
     public function destroy($id)
     {
         $record = Post::find($id);
         if( $record->delete() )
-        {
-            return Redirect::to('posts');
-        }
+			return Redirect::to('posts');
     }
 
 }

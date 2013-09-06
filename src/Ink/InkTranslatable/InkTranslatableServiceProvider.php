@@ -43,7 +43,7 @@ class InkTranslatableServiceProvider extends ServiceProvider {
         {
 
             $config = $app['config']->get('ink-translatable::config');
-            $locales = $app['config']->get('locales.locales');
+            $locales = $app['config']->get('app.locales');
 
             return new Translatable($config, $locales);
         });
