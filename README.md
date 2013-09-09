@@ -93,8 +93,8 @@ class Post extends EloquentTranslatable
 	 * @var array
 	 */
 	public static $translatable = array(
-  		'model_name' => 'PostTranslation',
-	    'table' => 'posts_translations',
+  	    'model_name' => 'PostTranslation',
+	    'table_name' => 'posts_translations',
 	    'relationship_field' => 'post_id',
 	    'locale_field' => 'lang',
 	    'translatables' => array(
@@ -131,8 +131,8 @@ By default, global configuration can be set in the `app/config/packages/ink/ink-
 
 ```php
 return array(
-  	'model_name' => null,
-    'table' => null,
+    'model_name' => null,
+    'table_name' => null,
     'relationship_field' => null,
     'locale_field' => 'lang',
     'translatables' => array(
