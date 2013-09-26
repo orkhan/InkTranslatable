@@ -71,9 +71,9 @@ class Translatable {
             if ( array_key_exists($locale, $inputs) )
             {
 
-                // merge translatable fields from POST parameters
+                // get translatable fields from POST parameters
 
-                $translatables = array_merge( $translatables, $inputs[$locale] );
+                $translatables = $inputs[$locale];
 
                 // finding translation
 
