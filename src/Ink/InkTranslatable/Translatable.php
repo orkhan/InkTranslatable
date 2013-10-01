@@ -75,33 +75,30 @@ class Translatable {
 
                 $translatables = $inputs[$locale];
 
-                // finding translation
+                // get translation from model if it exists
 
-                $translation = DB::table($table_name)->where( $relationship_field, '=', $model->id )
-                    ->where( $locale_field, '=', $locale )
-                    ->first();
+                $translation_model = $model_name::where( $relationship_field, '=', $model->id )
+                    ->where( $locale_field, '=', $locale )->first();
 
-                // if translation exists do update
+                // if translation not exists, create a new translation
 
-                if ($translation)
-                {
-                    DB::table($table_name)
-                        ->where( $relationship_field, '=', $translation->{$relationship_field} )
-                        ->where( $locale_field, '=', $translation->{$locale_field} )
-                        ->update($translatables);
-                }
-
-                // if translation not exists do insert
-
-                else
+                if ( ! $translation_model)
                 {
                     $translatables[$locale_field] = $locale;
                     $translatables[$relationship_field] = $model->id;
 
-                    DB::table($table_name)->insert(
-                        $translatables
-                    );
+                    $translation_model = new $model_name;
                 }
+
+                // add values to translation
+
+                foreach ($translatables as $field => $value) {
+                    $translation_model->$field = $value;
+                }
+
+                // save
+
+                $translation_model->save();
 
             }
 
