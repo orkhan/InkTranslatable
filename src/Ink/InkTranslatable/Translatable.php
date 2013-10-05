@@ -1,17 +1,9 @@
 <?php namespace Ink\InkTranslatable;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 
 class Translatable {
-
-    /**
-     * The configuration array
-     *
-     * @var array
-     */
-    protected $config = array();
 
     /**
      * The locales array
@@ -26,11 +18,8 @@ class Translatable {
      * @param array $config
      * @param array $locales
      */
-    public function __construct( array $config, array $locales ) {
-
-        $this->config = $config;
+    public function __construct( array $locales ) {
         $this->locales = $locales;
-
     }
 
     /**
@@ -47,16 +36,10 @@ class Translatable {
         if ( !isset( $model::$translatable ) )
             return true;
 
-
-        // load the configuration
-
-        $config = array_merge( $this->config, $model::$translatable );
-
-
         // nicer variables for readability
 
-        $model_name = $table_name = $relationship_field = $locale_field = $translatables = null;
-        extract( $config, EXTR_IF_EXISTS );
+        $translationModel = $relationshipField = $localeField = $translatables = null;
+        extract( $model::$translatable, EXTR_IF_EXISTS );
 
         // POST parameters
 
@@ -77,28 +60,30 @@ class Translatable {
 
                 // get translation from model if it exists
 
-                $translation_model = $model_name::where( $relationship_field, '=', $model->id )
-                    ->where( $locale_field, '=', $locale )->first();
+                $record = $translationModel::where( $relationshipField, '=', $model->id )
+                    ->where( $localeField, '=', $locale )
+					->first();
 
                 // if translation not exists, create a new translation
 
-                if ( ! $translation_model)
+                if ( !$record )
                 {
-                    $translatables[$locale_field] = $locale;
-                    $translatables[$relationship_field] = $model->id;
+                    $translatables[$localeField]       = $locale;
+                    $translatables[$relationshipField] = $model->id;
 
-                    $translation_model = new $model_name;
+                    $record = new $translationModel;
                 }
 
                 // add values to translation
 
-                foreach ($translatables as $field => $value) {
-                    $translation_model->$field = $value;
+                foreach ($translatables as $field => $value)
+				{
+                    $record->$field = $value;
                 }
 
                 // save
 
-                $translation_model->save();
+                $record->save();
 
             }
 

@@ -41,11 +41,8 @@ class InkTranslatableServiceProvider extends ServiceProvider {
     {
         $this->app['translatable'] = $this->app->share(function($app)
         {
-
-            $config = $app['config']->get('ink-translatable::config');
             $locales = $app['config']->get('app.locales');
-
-            return new Translatable($config, $locales);
+            return new Translatable($locales);
         });
     }
 

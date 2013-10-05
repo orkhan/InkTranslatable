@@ -8,12 +8,12 @@ abstract class EloquentTranslatable extends \Eloquent {
     {
 		if ( !$locale ) $locale = Config::get('app.locale');
 		
-        return $this->_translations()->where(static::$translatable['locale_field'], '=', $locale);
+        return $this->_translations()->where(static::$translatable['localeField'], '=', $locale);
     }
 	
 	public function _translations()
 	{
-		return $this->hasMany(static::$translatable['model_name'], static::$translatable['relationship_field']);
+		return $this->hasMany(static::$translatable['translationModel'], static::$translatable['relationshipField']);
 	}
 	
 	public function __get($key)
@@ -25,7 +25,7 @@ abstract class EloquentTranslatable extends \Eloquent {
 			return $this->translations($key)->first();
 		}
 		
-		if ( array_key_exists($key, static::$translatable['translatables']) )
+		if ( in_array($key, static::$translatable['translatables']) )
 		{
 			return $this->translations->first()->{$key};
 		}

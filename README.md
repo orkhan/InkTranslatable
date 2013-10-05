@@ -93,12 +93,11 @@ class Post extends EloquentTranslatable
 	 * @var array
 	 */
 	public static $translatable = array(
-  	    'model_name' => 'PostTranslation',
-	    'table_name' => 'posts_translations',
-	    'relationship_field' => 'post_id',
-	    'locale_field' => 'lang',
-	    'translatables' => array(
-	        'title' => '',
+  	    'translationModel'  => 'PostTranslation',
+	    'relationshipField' => 'post_id',
+	    'localeField'       => 'lang',
+	    'translatables'     => array(
+	        'title',
 	    )
 	);
 
@@ -121,25 +120,6 @@ class PostTranslation extends Eloquent
 ```
 
 That's it ... your model is now "translatable"!
-
-
-## Configuration
-
-Configuration was designed to be as flexible as possible. You can set up defaults for all of your EloquentTranslatable models, and then override those settings for individual models.
-
-By default, global configuration can be set in the `app/config/packages/ink/ink-translatable/config.php` file.  If a configuration isn't set, then the package defaults from `vendor/ink/ink-translatable/src/config/config.php` are used.  Here is an example configuration, with all the default settings shown:
-
-```php
-return array(
-    'model_name' => null,
-    'table_name' => null,
-    'relationship_field' => null,
-    'locale_field' => 'lang',
-    'translatables' => array(
-        'title' => '',
-    )
-);
-```
 
 ## Basic usage
 

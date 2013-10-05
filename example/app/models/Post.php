@@ -17,12 +17,11 @@ class Post extends EloquentTranslatable
 	 * @var array
 	 */
 	public static $translatable = array(
-		'model_name' => 'PostTranslation',
-	    'table_name' => 'posts_translations',
-	    'relationship_field' => 'post_id',
-	    'locale_field' => 'lang',
-	    'translatables' => array(
-	        'title' => '',
+		'translationModel'  => 'PostTranslation',
+	    'relationshipField' => 'post_id',
+	    'localeField'       => 'lang',
+	    'translatables'     => array(
+	        'title',
 	    )
 	);
 }
