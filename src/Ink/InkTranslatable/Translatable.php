@@ -29,7 +29,7 @@ class Translatable {
 	 *
      * @return boolean
      */
-    public function translate( Model $model )
+    public function translate( Model $model, $inputs = array() )
     {
         // if the model isn't translatable, then do nothing
         if ( !isset( $model::$translatable ) )
@@ -38,9 +38,9 @@ class Translatable {
         // nicer variables for readability
         $translationModel = $relationshipField = $localeField = $translatables = null;
         extract( $model::$translatable, EXTR_IF_EXISTS );
-
+		
         // POST parameters
-        $inputs = Input::all();
+        if ( sizeof($inputs) == 0 ) $inputs = Input::all();
 
         // iterating locales
         foreach($this->locales as $locale)
@@ -51,6 +51,9 @@ class Translatable {
 
                 // get translatable fields from POST parameters
                 $translatables = $inputs[$locale];
+
+		        if ( !$translatables )
+		            return true;
 
                 // get translation from model if it exists
                 $record = $translationModel::where( $relationshipField, '=', $model->id )
@@ -65,7 +68,13 @@ class Translatable {
 
                     $record = new $translationModel;
                 }
-
+					
+                // add values to translation
+                foreach ($inputs[$locale] as $field => $value)
+				{
+					if ( !in_array($field, $model::$translatable['translatables']) ) return true;
+                }
+					
                 // add values to translation
                 foreach ($translatables as $field => $value)
 				{
